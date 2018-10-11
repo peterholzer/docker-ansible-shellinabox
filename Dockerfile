@@ -16,7 +16,7 @@ ENV SIAB_USERCSS="Normal:+/etc/shellinabox/options-enabled/00+Black-on-White.css
     SIAB_PKGS=none \
     SIAB_SCRIPT=none
 
-RUN yum update \
+RUN yum update -y \
  && yum install -y openssl curl openssh-client sudo shellinabox \
     python-pip git tree nano \
  && pip install ansible \
