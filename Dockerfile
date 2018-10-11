@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM centos:7
 
 ENV SIAB_USERCSS="Normal:+/etc/shellinabox/options-enabled/00+Black-on-White.css,Reverse:-/etc/shellinabox/options-enabled/00_White-On-Black.css;Colors:+/etc/shellinabox/options-enabled/01+Color-Terminal.css,Monochrome:-/etc/shellinabox/options-enabled/01_Monochrome.css" \
     SIAB_PORT=4200 \
@@ -16,19 +16,23 @@ ENV SIAB_USERCSS="Normal:+/etc/shellinabox/options-enabled/00+Black-on-White.css
     SIAB_PKGS=none \
     SIAB_SCRIPT=none
 
-RUN apt-get update && apt-get install -y openssl curl openssh-client sudo shellinabox && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    ln -sf '/etc/shellinabox/options-enabled/00+Black on White.css' \
-      /etc/shellinabox/options-enabled/00+Black-on-White.css && \
-    ln -sf '/etc/shellinabox/options-enabled/00_White On Black.css' \
-      /etc/shellinabox/options-enabled/00_White-On-Black.css && \
-    ln -sf '/etc/shellinabox/options-enabled/01+Color Terminal.css' \
-      /etc/shellinabox/options-enabled/01+Color-Terminal.css
+RUN yum update \
+ && yum install -y openssl curl openssh-client sudo shellinabox \
+    python-pip git tree nano \
+ && pip install ansible \
+ && yum clean \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+ && ln -sf '/etc/shellinabox/options-enabled/00+Black on White.css' /etc/shellinabox/options-enabled/00+Black-on-White.css \
+ && ln -sf '/etc/shellinabox/options-enabled/00_White On Black.css' /etc/shellinabox/options-enabled/00_White-On-Black.css \
+ && ln -sf '/etc/shellinabox/options-enabled/01+Color Terminal.css' /etc/shellinabox/options-enabled/01+Color-Terminal.css
+
+RUN curl -fL https://getcli.jfrog.io | sh
 
 EXPOSE 4200
 
-VOLUME /etc/shellinabox /var/log/supervisor /home
+VOLUME /etc/shellinabox
+VOLUME /var/log/supervisor
+VOLUME /home
 
 ADD assets/entrypoint.sh /usr/local/sbin/
 
