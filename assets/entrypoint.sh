@@ -8,14 +8,16 @@ hex()
 }
 
 echo "Preparing container .."
-COMMAND="/usr/bin/shellinaboxd --debug --no-beep --disable-peer-check -u shellinabox -g shellinabox -c /var/lib/shellinabox -p ${SIAB_PORT} --user-css ${SIAB_USERCSS}"
+# COMMAND="/usr/sbin/shellinaboxd --debug --no-beep --disable-peer-check -u shellinabox -g shellinabox -c /var/lib/shellinabox -p ${SIAB_PORT} --user-css ${SIAB_USERCSS}"
+# COMMAND="/usr/sbin/shellinaboxd --debug --no-beep --disable-peer-check -u shellinabox -g shellinabox -c /var/lib/shellinabox -p ${SIAB_PORT} --user-css Normal:+/usr/share/shellinabox/white-on-black.css"
+COMMAND="/usr/sbin/shellinaboxd --debug --no-beep --disable-peer-check -u shellinabox -g shellinabox -c /var/lib/shellinabox -p ${SIAB_PORT}"
 
 if [ "$SIAB_PKGS" != "none" ]; then
 	set +e
-	/usr/bin/apt-get update
-	/usr/bin/apt-get install -y $SIAB_PKGS
-	/usr/bin/apt-get clean
-	/bin/rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+	yum update
+	yum install -y $SIAB_PKGS
+	yum clean all
+	/bin/rm -rf /var/cache/yum* /tmp/* /var/tmp/*
 	set -e
 fi
 
